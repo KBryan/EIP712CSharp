@@ -6,12 +6,20 @@ using System.Collections.Generic;
 
 namespace EIP712Signature
 {
+    /// <summary>
+    /// Represents the EIP712 class for signing typed data using the EIP712 standard.
+    /// </summary>
     class EIP712
     {
+        /// <summary>
+        /// The entry point of the program.
+        /// </summary>
+        /// <param name="args">Command-line arguments</param>
         static void Main(string[] args)
         {
-            var privKey = "ADD_PRIVATE_KEY";
+            var privKey = "ADD_PRIVATE_KEY"; // Replace with an actual private key
             var account = new Account(privKey);
+
             var typedData = new TypedData
             {
                 Domain = new Domain
@@ -66,17 +74,22 @@ namespace EIP712Signature
             };
 
             var sig = Eip712TypedDataSigner.Current.SignTypedData(typedData, new EthECKey(account.PrivateKey));
-            
+
             var parsedSignature = ParseSignature(sig);
             Console.WriteLine(
                 $"signature:\n{sig}\n" +
                 $"SigR:\n{parsedSignature.R}\n" +
                 $"SigS:\n{parsedSignature.S}\n" +
                 $"SigV:\n{parsedSignature.V}\n"
-                );
+            );
         }
 
-        private static Signature ParseSignature (string fullSig)
+        /// <summary>
+        /// Parses the full signature string into its components (R, S, and V).
+        /// </summary>
+        /// <param name="fullSig">The full signature string without the "0x" prefix.</param>
+        /// <returns>The parsed signature object.</returns>
+        private static Signature ParseSignature(string fullSig)
         {
             if (fullSig.StartsWith("0x"))
                 fullSig = fullSig[2..];
